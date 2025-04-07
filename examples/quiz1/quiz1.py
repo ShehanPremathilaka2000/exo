@@ -73,6 +73,10 @@ def wrong_schedule(p):
     p = stage_mem(p, innermost_loop, "inp[8*io:8*io+8]", "inp_vec")
     p = simplify(p)
 
+    # Set the memory types to be AVX2 vectors
+    for name in ["two", "out", "inp"]:
+        p = set_memory(p, f"{name}_vec", AVX2)
+
     # Replace with AVX instructinos
     avx_instrs = [vector_assign_two, vector_multiply, vector_load, vector_store]
     p = replace_all(p, avx_instrs)
