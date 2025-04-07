@@ -31,11 +31,14 @@ def wrong_schedule(p):
 
     p, num_vectors = stage_exprs(p, num_vectors, p.find("c[_] = _"))
 
+    # First, expand dimensions and lift allocations for all vectors
     for i in range(num_vectors):
         vector_reg = p.find(f"vec: _ #{i}")
         p = expand_dim(p, vector_reg, 8, "ii")
         p = lift_alloc(p, vector_reg)
 
+    # Then, perform fission operations separately
+    for i in range(num_vectors):
         vector_assign = p.find(f"vec = _ #{i}")
         p = fission(p, vector_assign.after())
 
