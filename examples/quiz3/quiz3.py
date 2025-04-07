@@ -30,7 +30,7 @@ def tile_and_fused_blur(
 
 
 def get_loops_at_or_above(cursor):
-    loops = []
+    loops = [cursor]  # Changed from loops = [] to include the initial cursor
     while not isinstance((parent := cursor.parent()), InvalidCursor):
         loops.append(parent)
         cursor = parent
